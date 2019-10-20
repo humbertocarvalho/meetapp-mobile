@@ -7,23 +7,13 @@ export function* signIn({ payload }) {
   try {
     const { email, password } = payload;
 
-    const response = yield call(api.post, 'sessions', { email, password });
+    const response = yield call(api.post, 'session', { email, password });
 
     const { token, user } = response.data;
-
-    if (user.provider) {
-      Alert.alert(
-        'Erro no login',
-        'O usuário não pode ser prestador de serviços.',
-      );
-      return;
-    }
 
     api.defaults.headers.Authorization = `Bearear ${token}`;
 
     yield put(signInSuccess(token, user));
-
-    // history.push('/dashboard');
   } catch (error) {
     Alert.alert('Erro', 'Erros ocorreram. Verifique seus dados');
     yield put(signFailure());
@@ -34,13 +24,11 @@ export function* signUp({ payload }) {
   try {
     const { name, email, password } = payload;
 
-    yield call(api.post, 'users', {
+    yield call(api.post, 'user', {
       name,
       email,
       password,
     });
-
-    // history.push('/');
   } catch (error) {
     Alert.alert('Erro', 'Erros ocorreram. Verifique seus dados');
     yield put(signFailure());

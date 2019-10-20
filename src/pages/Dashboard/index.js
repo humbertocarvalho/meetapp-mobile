@@ -3,42 +3,43 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { withNavigationFocus } from 'react-navigation';
 
 import Background from '~/components/Background';
-import Appointment from '~/components/Appointment';
-import { Container, Title, List } from './styles';
+import Meetup from '~/components/Meetup';
+import { Container, List } from './styles';
 import api from '~/services/api';
+import Header from '~/components/Header';
 
 function Dashboard({ isFocused }) {
-  const [appointments, setAppointments] = useState([]);
+  const [meetups, setMeetups] = useState([]);
 
-  async function loadAppointments() {
-    const response = await api.get('appointments');
-    setAppointments(response.data);
+  async function loadMeetups() {
+    const response = await api.get('meetups');
+    setMeetups(response.data);
   }
 
   useEffect(() => {
     if (isFocused) {
-      loadAppointments();
+      loadMeetups();
     }
   }, [isFocused]);
 
   async function handleCancel(id) {
-    const response = await api.delete(`appointments/${id}`);
+    const response = await api.delete(`meetups/${id}`);
 
-    setAppointments(
-      appointments.map(a =>
+    setMeetups(
+      meetups.map(a =>
         a.id === id ? { ...a, canceled_at: response.data.canceled_at } : a,
       ),
     );
   }
   return (
     <Background>
+      <Header />
       <Container>
-        <Title>Agendamentos</Title>
         <List
-          data={appointments}
+          data={meetups}
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
-            <Appointment onCancel={() => handleCancel(item.id)} data={item} />
+            <Meetup onCancel={() => handleCancel(item.id)} data={item} />
           )}
         />
       </Container>
@@ -47,9 +48,9 @@ function Dashboard({ isFocused }) {
 }
 
 Dashboard.navigationOptions = {
-  tabBarLabel: 'Agendamentos',
+  tabBarLabel: 'Meetups',
   tabBarIcon: ({ tintColor }) => (
-    <Icon name="event" size={20} color={tintColor} />
+    <Icon name="list" size={20} color={tintColor} />
   ),
 };
 

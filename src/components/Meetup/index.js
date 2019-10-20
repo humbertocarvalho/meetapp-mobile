@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { Container, Left, Avatar, Info, Name, Time } from './styles';
 
-export default function Appointment({ data, onCancel }) {
+export default function Meetup({ data, onCancel }) {
   const dateParsed = useMemo(() => {
     return formatRelative(parseISO(data.date), new Date(), {
       locale: pt,
