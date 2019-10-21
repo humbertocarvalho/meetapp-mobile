@@ -9,7 +9,14 @@ import api from '~/services/api';
 import Header from '~/components/Header';
 
 function Dashboard({ isFocused }) {
-  const [meetups, setMeetups] = useState([]);
+  const [meetups, setMeetups] = useState([
+    {
+      past: false,
+      provider: { name: 'Humberto' },
+      date: '01/01/2010 10:00:00',
+      id: 1,
+    },
+  ]);
 
   async function loadMeetups() {
     const response = await api.get('meetups');
