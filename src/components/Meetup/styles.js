@@ -19,6 +19,8 @@ export const Banner = styled.Image`
 export const Info = styled.View`
   margin-top: 20px;
   margin-left: 18px;
+  align-items: baseline;
+  justify-content: flex-start;
 `;
 
 export const Title = styled.Text`
@@ -27,22 +29,14 @@ export const Title = styled.Text`
   color: #333;
 `;
 
-export const TextInfo = styled.Text``;
-
-export const Name = styled.Text`
-  font-weight: bold;
-  font-size: 14px;
-  color: #333;
-`;
-
-export const Time = styled.Text`
-  color: #999;
+export const TextInfo = styled.Text`
   font-size: 13px;
-  margin-top: 4px;
+  color: #999999;
+  margin-top: 9px;
 `;
 
 export const SubmitButton = styled(Button)`
   width: 295px;
   height: 40px;
-  margin-top: 5px;
+  margin-top: 10px;
 `;

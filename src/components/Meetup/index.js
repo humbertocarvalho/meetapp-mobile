@@ -26,15 +26,20 @@ export default function Meetup({ data, onCancel }) {
       <Banner source={banner} />
       <Info>
         <Title>Meetup de React Native</Title>
-        <TextInfo>24 de Junho, às 20h</TextInfo>
-        <SubmitButton>Realizar inscrição</SubmitButton>
+        <TextInfo>
+          <Icon name={'event'} size={18} />
+          24 de Junho, às 20h
+        </TextInfo>
+        <TextInfo>
+          <Icon name={'place'} size={18} />
+          Rua Guilherme Gembala, 260
+        </TextInfo>
+        <TextInfo>
+          <Icon name={'person'} size={18} />
+          Organizador: Diego Fernandes
+        </TextInfo>
+        {!data.past && <SubmitButton>Realizar inscrição</SubmitButton>}
       </Info>
-
-      {/* {data.cancelable && !data.canceled_at && (
-        <TouchableOpacity onPress={onCancel}>
-          <Icon name="event-busy" size={20} color="#f64c75" />
-        </TouchableOpacity>
-      )} */}
     </Container>
   );
 }
