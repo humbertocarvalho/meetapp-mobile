@@ -13,7 +13,7 @@ import {
   TextInfo,
 } from './styles';
 
-export default function Meetup({ data, onCancel }) {
+export default function Meetup({ data, onClick, buttonText }) {
   // const dateParsed = useMemo(() => {
   //   return formatRelative(parseISO(data.date), new Date(), {
   //     locale: pt,
@@ -38,7 +38,9 @@ export default function Meetup({ data, onCancel }) {
           <Icon name={'person'} size={18} />
           Organizador: Diego Fernandes
         </TextInfo>
-        {!data.past && <SubmitButton>Realizar inscrição</SubmitButton>}
+        {!data.past && (
+          <SubmitButton onPress={onClick}>{buttonText}</SubmitButton>
+        )}
       </Info>
     </Container>
   );

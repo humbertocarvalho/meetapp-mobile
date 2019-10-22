@@ -35,7 +35,7 @@ function Dashboard({ isFocused }) {
     }
   }, [isFocused]);
 
-  async function handleCancel(id) {
+  async function handleSubscription(id) {
     const response = await api.delete(`meetups/${id}`);
 
     setMeetups(
@@ -52,7 +52,11 @@ function Dashboard({ isFocused }) {
           data={meetups}
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
-            <Meetup onCancel={() => handleCancel(item.id)} data={item} />
+            <Meetup
+              onClick={() => handleSubscription(item.id)}
+              buttonText="Realizar Inscrição"
+              data={item}
+            />
           )}
         />
       </Container>
