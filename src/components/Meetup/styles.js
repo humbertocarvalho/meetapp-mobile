@@ -14,6 +14,7 @@ export const Container = styled.View`
 export const Banner = styled.Image`
   width: 335px;
   height: 150px;
+  border-radius: 4px;
 `;
 
 export const Info = styled.View`

@@ -16,6 +16,12 @@ function Dashboard({ isFocused }) {
       date: '01/01/2010 10:00:00',
       id: 1,
     },
+    {
+      past: false,
+      provider: { name: 'Humberto' },
+      date: '01/01/2010 10:00:00',
+      id: 1,
+    },
   ]);
 
   async function loadMeetups() {
