@@ -52,13 +52,9 @@ function Dashboard({ isFocused }) {
   }, [date, isFocused]);
 
   async function handleSubscription(id) {
-    const response = await api.delete(`meetups/${id}`);
-
-    setMeetups(
-      meetups.map(a =>
-        a.id === id ? { ...a, canceled_at: response.data.canceled_at } : a,
-      ),
-    );
+    console.tron.log('aqui chegou');
+    const response = await api.post(`registration/${id}`);
+    console.tron.log(response);
   }
 
   function handlePrevDay() {
@@ -89,7 +85,7 @@ function Dashboard({ isFocused }) {
             keyExtractor={item => String(item.id)}
             renderItem={({ item }) => (
               <Meetup
-                onClick={() => handleSubscription(item.id)}
+                onSubmit={() => handleSubscription(item.id)}
                 buttonText="Realizar Inscrição"
                 data={item}
               />

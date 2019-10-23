@@ -13,13 +13,14 @@ import {
   TextInfo,
 } from './styles';
 
-export default function Meetup({ data, onClick, buttonText }) {
+export default function Meetup({ data, onSubmit, buttonText }) {
   const dateParsed = useMemo(() => {
     return formatRelative(parseISO(data.date), new Date(), {
       locale: pt,
       addSuffix: true,
     });
   }, [data.date]);
+
   // TODO Verificar por que não está trazendo certo a imamge.
   return (
     <Container past={data.past}>
@@ -39,7 +40,7 @@ export default function Meetup({ data, onClick, buttonText }) {
           {`Organizador: ${data.host.name}`}
         </TextInfo>
         {!data.past && (
-          <SubmitButton onPress={onClick}>{buttonText}</SubmitButton>
+          <SubmitButton onPress={onSubmit}>{buttonText}</SubmitButton>
         )}
       </Info>
     </Container>
