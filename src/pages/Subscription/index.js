@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ActivityIndicator, Text } from 'react-native';
+import api from '~/services/api';
 import Background from '~/components/Background';
 import Header from '~/components/Header';
 import Meetup from '~/components/Meetup';
@@ -7,22 +8,21 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { Container, List } from './styles';
 
-export default function Subscription() {
+export default function Subscription({ isFocused }) {
+  const [meetups, setMeetups] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [meetups, setMeetups] = useState([
-    {
-      past: false,
-      provider: { name: 'Humberto' },
-      date: '01/01/2010 10:00:00',
-      id: 1,
-    },
-    {
-      past: false,
-      provider: { name: 'Humberto' },
-      date: '01/01/2010 10:00:00',
-      id: 1,
-    },
-  ]);
+
+  useEffect(() => {
+    async function loadSubscriptions() {
+      const response = await api.get('registration');
+
+      const meetupsFormatted = response.data.map(meetup => meetup.meetup);
+
+      setMeetups(meetupsFormatted);
+      setLoading(false);
+    }
+    loadSubscriptions();
+  }, [isFocused]);
 
   function handleCancel() {}
 
@@ -30,17 +30,21 @@ export default function Subscription() {
     <Background>
       <Header />
       <Container>
-        <List
-          data={meetups}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => (
-            <Meetup
-              onClick={() => handleCancel(item.id)}
-              buttonText="Cancelar Inscrição"
-              data={item}
-            />
-          )}
-        />
+        {loading ? (
+          <ActivityIndicator size="large" color="#7159c1" />
+        ) : (
+          <List
+            data={meetups}
+            keyExtractor={item => String(item.id)}
+            renderItem={({ item }) => (
+              <Meetup
+                onClick={() => handleCancel(item.id)}
+                buttonText="Cancelar Inscrição"
+                data={item}
+              />
+            )}
+          />
+        )}
       </Container>
     </Background>
   );
