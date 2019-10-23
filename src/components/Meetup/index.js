@@ -14,29 +14,29 @@ import {
 } from './styles';
 
 export default function Meetup({ data, onClick, buttonText }) {
-  // const dateParsed = useMemo(() => {
-  //   return formatRelative(parseISO(data.date), new Date(), {
-  //     locale: pt,
-  //     addSuffix: true,
-  //   });
-  // }, [data.date]);
+  const dateParsed = useMemo(() => {
+    return formatRelative(parseISO(data.date), new Date(), {
+      locale: pt,
+      addSuffix: true,
+    });
+  }, [data.date]);
   // TODO Verificar por que não está trazendo certo a imamge.
   return (
     <Container past={data.past}>
       <Banner source={banner} />
       <Info>
-        <Title>Meetup de React Native</Title>
+        <Title>{data.title}</Title>
         <TextInfo>
           <Icon name={'event'} size={18} />
-          24 de Junho, às 20h
+          {dateParsed}
         </TextInfo>
         <TextInfo>
           <Icon name={'place'} size={18} />
-          Rua Guilherme Gembala, 260
+          {data.location}
         </TextInfo>
         <TextInfo>
           <Icon name={'person'} size={18} />
-          Organizador: Diego Fernandes
+          {`Organizador: ${data.host.name}`}
         </TextInfo>
         {!data.past && (
           <SubmitButton onPress={onClick}>{buttonText}</SubmitButton>

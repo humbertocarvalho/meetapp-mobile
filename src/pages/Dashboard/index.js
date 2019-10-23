@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { withNavigationFocus } from 'react-navigation';
 import { format, addDays, subDays } from 'date-fns';
@@ -35,16 +35,21 @@ function Dashboard({ isFocused }) {
     [date],
   );
 
-  async function loadMeetups() {
-    const response = await api.get('meetups');
-    setMeetups(response.data);
-  }
-
   useEffect(() => {
+    async function loadMeetups() {
+      const response = await api.get('meetups', {
+        params: {
+          date,
+        },
+      });
+      setMeetups(response.data);
+      setLoading(false);
+    }
     if (isFocused) {
+      setLoading(true);
       loadMeetups();
     }
-  }, [isFocused]);
+  }, [date, isFocused]);
 
   async function handleSubscription(id) {
     const response = await api.delete(`meetups/${id}`);
@@ -76,17 +81,21 @@ function Dashboard({ isFocused }) {
             <Icon size={36} name="chevron-right" color="#fff" />
           </TouchableOpacity>
         </DashHeader>
-        <List
-          data={meetups}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => (
-            <Meetup
-              onClick={() => handleSubscription(item.id)}
-              buttonText="Realizar Inscrição"
-              data={item}
-            />
-          )}
-        />
+        {loading ? (
+          <ActivityIndicator size="large" color="#7159c1" />
+        ) : (
+          <List
+            data={meetups}
+            keyExtractor={item => String(item.id)}
+            renderItem={({ item }) => (
+              <Meetup
+                onClick={() => handleSubscription(item.id)}
+                buttonText="Realizar Inscrição"
+                data={item}
+              />
+            )}
+          />
+        )}
       </Container>
     </Background>
   );
