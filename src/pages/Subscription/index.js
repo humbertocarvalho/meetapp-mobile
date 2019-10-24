@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, Text } from 'react-native';
+import { ActivityIndicator, Alert } from 'react-native';
+import { withNavigationFocus } from 'react-navigation';
 import api from '~/services/api';
 import Background from '~/components/Background';
 import Header from '~/components/Header';
@@ -8,23 +9,40 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { Container, List } from './styles';
 
-export default function Subscription({ isFocused }) {
+function Subscription({ isFocused }) {
   const [meetups, setMeetups] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  async function loadSubscriptions() {
+    console.tron.log('aqui chegou');
+    setLoading(true);
+    const response = await api.get('registration');
+
+    const meetupsFormatted = response.data.map(meetup => {
+      return { ...meetup.meetup, registrationId: meetup.id };
+    });
+
+    console.tron.log('aqui carregando');
+
+    setMeetups(meetupsFormatted);
+    setLoading(false);
+  }
+
   useEffect(() => {
-    async function loadSubscriptions() {
-      const response = await api.get('registration');
-
-      const meetupsFormatted = response.data.map(meetup => meetup.meetup);
-
-      setMeetups(meetupsFormatted);
-      setLoading(false);
+    if (isFocused) {
+      loadSubscriptions();
     }
-    loadSubscriptions();
   }, [isFocused]);
 
-  function handleCancel() {}
+  async function handleCancel(id) {
+    try {
+      await api.delete(`registration/${id}`);
+      Alert.alert('Sucesso!', 'Você cancelou seu registro no Meetup!');
+      loadSubscriptions();
+    } catch (err) {
+      console.tron.error(err);
+    }
+  }
 
   return (
     <Background>
@@ -38,7 +56,7 @@ export default function Subscription({ isFocused }) {
             keyExtractor={item => String(item.id)}
             renderItem={({ item }) => (
               <Meetup
-                onClick={() => handleCancel(item.id)}
+                onSubmit={() => handleCancel(item.registrationId)}
                 buttonText="Cancelar Inscrição"
                 data={item}
               />
@@ -56,3 +74,5 @@ Subscription.navigationOptions = {
     <Icon name="local-offer" size={20} color={tintColor} />
   ),
 };
+
+export default withNavigationFocus(Subscription);
