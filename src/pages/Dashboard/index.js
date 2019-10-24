@@ -44,7 +44,6 @@ function Dashboard({ isFocused }) {
         },
       });
 
-      console.tron.log(response.data);
       setMeetups(response.data);
       setLoading(false);
     }

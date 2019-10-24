@@ -14,15 +14,12 @@ function Subscription({ isFocused }) {
   const [loading, setLoading] = useState(true);
 
   async function loadSubscriptions() {
-    console.tron.log('aqui chegou');
     setLoading(true);
     const response = await api.get('registration');
 
     const meetupsFormatted = response.data.map(meetup => {
       return { ...meetup.meetup, registrationId: meetup.id };
     });
-
-    console.tron.log('aqui carregando');
 
     setMeetups(meetupsFormatted);
     setLoading(false);
@@ -40,7 +37,7 @@ function Subscription({ isFocused }) {
       Alert.alert('Sucesso!', 'Você cancelou seu registro no Meetup!');
       loadSubscriptions();
     } catch (err) {
-      console.tron.error(err);
+      Alert.alert('Error', 'Ocorreram erros ao cancelar sua inscrição :(');
     }
   }
 
