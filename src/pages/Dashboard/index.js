@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { TouchableOpacity, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { withNavigationFocus } from 'react-navigation';
 import { format, addDays, subDays } from 'date-fns';
@@ -37,24 +37,25 @@ function Dashboard({ isFocused }) {
 
   useEffect(() => {
     async function loadMeetups() {
+      setLoading(true);
       const response = await api.get('meetups', {
         params: {
           date,
         },
       });
+
+      console.tron.log(response.data);
       setMeetups(response.data);
       setLoading(false);
     }
     if (isFocused) {
-      setLoading(true);
       loadMeetups();
     }
   }, [date, isFocused]);
 
   async function handleSubscription(id) {
-    console.tron.log('aqui chegou');
     const response = await api.post(`registration/${id}`);
-    console.tron.log(response);
+    Alert.alert('Sucesso!', 'Você realizou seu registro no Meetup!');
   }
 
   function handlePrevDay() {
