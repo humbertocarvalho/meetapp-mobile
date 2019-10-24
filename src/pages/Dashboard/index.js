@@ -14,43 +14,45 @@ import { Container, List, DashHeader, Title } from './styles';
 
 function Dashboard({ isFocused }) {
   const [loading, setLoading] = useState(true);
-  const [meetups, setMeetups] = useState([
-    {
-      past: false,
-      provider: { name: 'Humberto' },
-      date: '01/01/2010 10:00:00',
-      id: 1,
-    },
-    {
-      past: false,
-      provider: { name: 'Humberto' },
-      date: '01/01/2010 10:00:00',
-      id: 1,
-    },
-  ]);
+  const [meetups, setMeetups] = useState([]);
   const [date, setDate] = useState(new Date());
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const dateFormatted = useMemo(
     () => format(date, "d 'de' MMMM", { locale: pt }),
     [date],
   );
 
-  useEffect(() => {
-    async function loadMeetups() {
-      setLoading(true);
-      const response = await api.get('meetups', {
-        params: {
-          date,
-        },
-      });
-
-      setMeetups(response.data);
-      setLoading(false);
+  async function loadMeetups(currentPage = 1) {
+    if (currentPage > 1 && !hasMore) {
+      return;
     }
+
+    const response = await api.get('meetups', {
+      params: {
+        date,
+        page: currentPage,
+      },
+    });
+
+    setMeetups(
+      currentPage > 1
+        ? [...meetups, ...response.data.rows]
+        : response.data.rows,
+    );
+    setHasMore(response.data.totalPages > currentPage);
+    setPage(currentPage);
+
+    setLoading(false);
+  }
+  useEffect(() => {
     if (isFocused) {
+      setLoading(true);
       loadMeetups();
     }
-  }, [date, isFocused]);
+  }, [date, isFocused]); // eslint-disable-line
 
   async function handleSubscription(id) {
     const response = await api.post(`registration/${id}`);
@@ -90,6 +92,10 @@ function Dashboard({ isFocused }) {
                 data={item}
               />
             )}
+            onRefresh={loadMeetups}
+            refreshing={refreshing}
+            onEndReached={() => loadMeetups(page + 1)}
+            onEndReachedThreshold={0.2}
           />
         )}
       </Container>
