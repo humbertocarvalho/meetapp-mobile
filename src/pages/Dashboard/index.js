@@ -57,8 +57,18 @@ function Dashboard({ isFocused }) {
   }, [date, isFocused]); // eslint-disable-line
 
   async function handleSubscription(id) {
-    const response = await api.post(`registration/${id}`);
-    Alert.alert('Sucesso!', 'Você realizou seu registro no Meetup!');
+    try {
+      await api.post(`registration/${id}`);
+      Alert.alert('Sucesso!', 'Você realizou seu registro no Meetup!');
+    } catch (err) {
+      const responseError = err.response.data;
+      Alert.alert(
+        'Erro :(',
+        responseError && responseError.error
+          ? `Erro ao se registrar no Meetup: ${responseError.error}`
+          : 'Erro ao se registrar no Meetup, tente novamente!',
+      );
+    }
   }
 
   function handlePrevDay() {

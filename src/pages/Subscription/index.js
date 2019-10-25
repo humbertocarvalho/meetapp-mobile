@@ -37,7 +37,13 @@ function Subscription({ isFocused }) {
       Alert.alert('Sucesso!', 'Você cancelou seu registro no Meetup!');
       loadSubscriptions();
     } catch (err) {
-      Alert.alert('Error', 'Ocorreram erros ao cancelar sua inscrição :(');
+      const responseError = err.response.data;
+      Alert.alert(
+        'Erro :(',
+        responseError && responseError.error
+          ? `Erro ao cancelar seu registro no Meetup: ${responseError.error}`
+          : 'Erro ao cancelar seu registro no Meetup, tente novamente!',
+      );
     }
   }
 
