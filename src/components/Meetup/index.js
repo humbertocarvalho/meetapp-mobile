@@ -15,7 +15,6 @@ import {
 } from './styles';
 
 export default function Meetup({ data, onSubmit, buttonText }) {
-  console.tron.log(data.banner.url);
   const dateParsed = useMemo(() => {
     return formatRelative(parseISO(data.date), new Date(), {
       locale: pt,
