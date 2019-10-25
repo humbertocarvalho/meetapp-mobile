@@ -30,10 +30,16 @@ export const Title = styled.Text`
   color: #333;
 `;
 
+export const InfoDiv = styled.View`
+  flex-direction: row;
+  align-items: baseline;
+`;
+
 export const TextInfo = styled.Text`
   font-size: 13px;
   color: #999999;
   margin-top: 9px;
+  padding-left: 5px;
 `;
 
 export const SubmitButton = styled(Button)`

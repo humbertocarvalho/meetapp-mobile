@@ -16,6 +16,8 @@ function Dashboard({ isFocused }) {
   const [loading, setLoading] = useState(true);
   const [meetups, setMeetups] = useState([]);
   const [date, setDate] = useState(new Date());
+
+  /* INFINITY SCROLL */
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
